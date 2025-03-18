@@ -1,4 +1,4 @@
-package com.bitinovus.gymmobile.ui.theme
+package com.bitinovus.gymmobile.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
