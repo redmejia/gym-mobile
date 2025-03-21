@@ -47,12 +47,12 @@ import com.bitinovus.gymmobile.presentation.viewmodels.workout.WorkoutViewmodel
 
 @Composable
 fun Workout(
-    workoutViewmodel: WorkoutViewmodel = viewModel(),
+    workoutViewmodel: WorkoutViewmodel,
 ) {
 
-    val timeLeft = workoutViewmodel.timeLeft.collectAsState()
+    val workoutState = workoutViewmodel.workoutState.collectAsState()
 
-    Text(text = "Time Left : ${workoutViewmodel.formatTime(timeLeft.value)}")
+    Text(text = "Time Left : ${workoutViewmodel.formatTime(workoutState.value.timeLeft)}")
     Box(
         modifier = Modifier
             .fillMaxHeight(0.35f),
