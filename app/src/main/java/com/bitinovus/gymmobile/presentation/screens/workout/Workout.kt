@@ -1,5 +1,6 @@
 package com.bitinovus.gymmobile.presentation.screens.workout
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,12 +27,15 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import com.bitinovus.gymmobile.R
+import com.bitinovus.gymmobile.WorkoutService
 import com.bitinovus.gymmobile.presentation.components.actionbuttons.category.Category
 import com.bitinovus.gymmobile.presentation.components.actioncard.ActionCard
 import com.bitinovus.gymmobile.presentation.components.fadingedge.Fading
@@ -40,6 +44,7 @@ import com.bitinovus.gymmobile.presentation.ui.theme.PrimaryBlack80
 
 @Composable
 fun Workout() {
+
     Box(
         modifier = Modifier
             .fillMaxHeight(0.35f),
@@ -153,19 +158,19 @@ fun Workout() {
                         image = R.drawable.squats,
                         title = "Squats",
                         routineSet = "3x10",
-                        duration = "12min"
+                        duration = 12
                     ),
                     Actions(
                         image = R.drawable.push_ups,
                         title = "Push ups",
                         routineSet = "3x12",
-                        duration = "15min"
+                        duration = 15
                     ),
                     Actions(
                         image = R.drawable.lunges,
                         title = "Lunges",
                         routineSet = "3x13",
-                        duration = "16min"
+                        duration = 16
                     )
                 )
                 exerciseList.forEach { action ->
@@ -186,7 +191,7 @@ fun Workout() {
                                 ) {
                                     RoutineDescription(
                                         painterIcon = R.drawable.outline_clock_analog,
-                                        description = action.duration,
+                                        description = "${action.duration}min",
                                         textStyle = TextStyle(
                                             color = Color.White,
                                         )
@@ -202,18 +207,29 @@ fun Workout() {
                             }
                         }
                     ) {
+                        val context = LocalContext.current
                         Button(
                             modifier = Modifier
                                 .padding(4.dp),
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = PrimaryBlack25
                             ),
-                            onClick = {}) { Text("Start") }
+                            onClick = {
+
+                                val workoutService = Intent(context, WorkoutService::class.java)
+                                    .also {
+                                        it.action = WorkoutService.Actions.START.toString()
+                                        it.putExtra(WorkoutService.EXTRA_DURATION, action.duration)
+                                    }
+                                ContextCompat.startForegroundService(context, workoutService)
+
+                            }) { Text("Start") }
+
                     }
                 }
                 OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = {  }) {
+                    onClick = { }) {
                     Text("Routine Completed", fontSize = 17.sp)
                 }
             }
@@ -225,5 +241,5 @@ data class Actions(
     val image: Int,
     val title: String,
     val routineSet: String,
-    val duration: String,
+    val duration: Int,
 )
