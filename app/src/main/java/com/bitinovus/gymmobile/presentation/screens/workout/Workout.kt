@@ -21,6 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -34,6 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bitinovus.gymmobile.R
 import com.bitinovus.gymmobile.WorkoutService
 import com.bitinovus.gymmobile.presentation.components.actionbuttons.category.Category
@@ -41,10 +43,16 @@ import com.bitinovus.gymmobile.presentation.components.actioncard.ActionCard
 import com.bitinovus.gymmobile.presentation.components.fadingedge.Fading
 import com.bitinovus.gymmobile.presentation.ui.theme.PrimaryBlack25
 import com.bitinovus.gymmobile.presentation.ui.theme.PrimaryBlack80
+import com.bitinovus.gymmobile.presentation.viewmodels.workout.WorkoutViewmodel
 
 @Composable
-fun Workout() {
+fun Workout(
+    workoutViewmodel: WorkoutViewmodel = viewModel(),
+) {
 
+    val timeLeft = workoutViewmodel.timeLeft.collectAsState()
+
+    Text(text = "Time Left : ${workoutViewmodel.formatTime(timeLeft.value)}")
     Box(
         modifier = Modifier
             .fillMaxHeight(0.35f),
@@ -227,6 +235,7 @@ fun Workout() {
 
                     }
                 }
+
                 OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = { }) {

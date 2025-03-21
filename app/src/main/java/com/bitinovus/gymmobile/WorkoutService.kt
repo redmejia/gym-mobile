@@ -9,7 +9,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
-import com.bitinovus.gymmobile.presentation.ui.theme.PrimaryBlack25
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -22,6 +21,9 @@ class WorkoutService : Service() {
         const val CHANNEL_ID = "WorkoutTimerChannel"
         const val NOTIFICATION_ID = 1
         const val EXTRA_DURATION = "EXTRA_DURATION"
+        const val ACTION_UPDATE_TIME = "com.bitinovus.gymmobile.UPDATE_TIME"
+        const val EXTRA_TIME_LEFT = "EXTRA_TIME_LEFT"
+        const val TIME_STOP = "TIME_STOP"
     }
 
 
@@ -47,10 +49,32 @@ class WorkoutService : Service() {
                 startTimer(duration)
             }
 
-            Actions.STOP.toString() -> stopSelf()
+            Actions.STOP.toString() -> {
+                stopSelf()
+                sendTimeStop(Actions.STOP.toString())
+            }
         }
 
         return START_STICKY
+
+    }
+
+    private fun sendTimeUpdate(timeLeft: Int) {
+
+        val intent = Intent(ACTION_UPDATE_TIME).apply {
+            putExtra(EXTRA_TIME_LEFT, timeLeft)
+        }
+
+        sendBroadcast(intent)
+    }
+
+    private fun sendTimeStop(timeActionStop: String) {
+
+        val intent = Intent(ACTION_UPDATE_TIME).apply {
+            putExtra(TIME_STOP, timeActionStop)
+        }
+
+        sendBroadcast(intent)
 
     }
 
@@ -63,6 +87,7 @@ class WorkoutService : Service() {
             while (remainingTime > 0) {
                 delay(1000) // Wait for 1 second
                 remainingTime--
+                sendTimeUpdate(remainingTime)
                 updateNotification(remainingTime)
             }
             stopSelf() // Stop service when timer ends
