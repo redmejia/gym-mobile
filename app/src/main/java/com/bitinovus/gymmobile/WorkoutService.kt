@@ -1,5 +1,6 @@
 package com.bitinovus.gymmobile
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -23,7 +24,6 @@ class WorkoutService : Service() {
         const val EXTRA_DURATION = "EXTRA_DURATION"
         const val ACTION_UPDATE_TIME = "com.bitinovus.gymmobile.UPDATE_TIME"
         const val EXTRA_TIME_LEFT = "EXTRA_TIME_LEFT"
-        const val TIME_STOP = "TIME_STOP"
     }
 
 
@@ -50,8 +50,8 @@ class WorkoutService : Service() {
             }
 
             Actions.STOP.toString() -> {
+                sendTimeStop()
                 stopSelf()
-                sendTimeStop(Actions.STOP.toString())
             }
         }
 
@@ -68,20 +68,21 @@ class WorkoutService : Service() {
         sendBroadcast(intent)
     }
 
-    private fun sendTimeStop(timeActionStop: String) {
+    // time stop set time to 0
+    private fun sendTimeStop() {
 
         val intent = Intent(ACTION_UPDATE_TIME).apply {
-            putExtra(TIME_STOP, timeActionStop)
+            putExtra(EXTRA_TIME_LEFT, 0)
         }
 
         sendBroadcast(intent)
-
     }
-
+    // If ForegroundServiceType is defined on the Manifest remove this line
+    @SuppressLint("ForegroundServiceType")
     private fun startTimer(duration: Int) {
         remainingTime = duration * 60
 
-        startForeground(NOTIFICATION_ID, createNotification(remainingTime))
+         startForeground(NOTIFICATION_ID, createNotification(remainingTime))
 
         job = CoroutineScope(Dispatchers.Main).launch {
             while (remainingTime > 0) {
@@ -90,6 +91,7 @@ class WorkoutService : Service() {
                 sendTimeUpdate(remainingTime)
                 updateNotification(remainingTime)
             }
+            sendTimeStop()
             stopSelf() // Stop service when timer ends
         }
     }

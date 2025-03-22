@@ -35,7 +35,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bitinovus.gymmobile.R
 import com.bitinovus.gymmobile.WorkoutService
 import com.bitinovus.gymmobile.presentation.components.actionbuttons.category.Category
@@ -43,6 +42,7 @@ import com.bitinovus.gymmobile.presentation.components.actioncard.ActionCard
 import com.bitinovus.gymmobile.presentation.components.fadingedge.Fading
 import com.bitinovus.gymmobile.presentation.ui.theme.PrimaryBlack25
 import com.bitinovus.gymmobile.presentation.ui.theme.PrimaryBlack80
+import com.bitinovus.gymmobile.presentation.viewmodels.workout.Timer
 import com.bitinovus.gymmobile.presentation.viewmodels.workout.WorkoutViewmodel
 
 @Composable
@@ -50,9 +50,10 @@ fun Workout(
     workoutViewmodel: WorkoutViewmodel,
 ) {
 
-    val workoutState = workoutViewmodel.workoutState.collectAsState()
 
-    Text(text = "Time Left : ${workoutViewmodel.formatTime(workoutState.value.timeLeft)}")
+    Timer(workoutViewmodel = workoutViewmodel)
+
+
     Box(
         modifier = Modifier
             .fillMaxHeight(0.35f),

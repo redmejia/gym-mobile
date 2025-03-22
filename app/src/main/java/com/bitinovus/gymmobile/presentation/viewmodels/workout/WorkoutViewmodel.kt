@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
+
 class WorkoutViewmodel(private val context: Context) : ViewModel() {
 
     private val _workoutState = MutableStateFlow(WorkoutState())
@@ -20,20 +21,11 @@ class WorkoutViewmodel(private val context: Context) : ViewModel() {
         override fun onReceive(context: Context?, intent: Intent?) {
 
             val time = intent?.getIntExtra(WorkoutService.EXTRA_TIME_LEFT, 0)
-            val stopAction = intent?.getIntExtra(WorkoutService.TIME_STOP, -1)
 
-            if (stopAction != -1) {
-//                _workoutState.value = 0
+            if (time != null) {
                 _workoutState.update { currentState ->
-                    currentState.copy(timeLeft = 0, timerStop = true)
+                    currentState.copy(timeLeft = time)
                 }
-
-            } else if (time != null) {
-//                _workoutState.value = time
-                _workoutState.update { currentState ->
-                    currentState.copy(timeLeft = time, timerStop = false)
-                }
-
             }
         }
     }
