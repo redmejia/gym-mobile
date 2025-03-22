@@ -91,7 +91,6 @@ class WorkoutService : Service() {
                 sendTimeUpdate(remainingTime)
                 updateNotification(remainingTime)
             }
-            sendTimeStop()
             stopSelf() // Stop service when timer ends
         }
     }
