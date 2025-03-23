@@ -9,22 +9,23 @@ import com.bitinovus.gymmobile.WorkoutService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+
 
 class WorkoutViewmodel(private val context: Context) : ViewModel() {
 
-    private val _timeLeft = MutableStateFlow(0)
-    val timeLeft: StateFlow<Int> = _timeLeft.asStateFlow()
+    private val _workoutState = MutableStateFlow(WorkoutState())
+    val workoutState: StateFlow<WorkoutState> = _workoutState.asStateFlow()
 
     private val timeReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
 
             val time = intent?.getIntExtra(WorkoutService.EXTRA_TIME_LEFT, 0)
-            val stopAction = intent?.getIntExtra(WorkoutService.TIME_STOP, -1)
 
-            if(stopAction != -1){
-                _timeLeft.value = 0
-            }else if (time != null) {
-                _timeLeft.value = time
+            if (time != null) {
+                _workoutState.update { currentState ->
+                    currentState.copy(timeLeft = time)
+                }
             }
         }
     }
