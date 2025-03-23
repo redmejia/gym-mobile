@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitinovus.gymmobile.presentation.ui.theme.PrimaryBlack25
-import com.bitinovus.gymmobile.presentation.ui.theme.PrimaryBlack95
+import com.bitinovus.gymmobile.presentation.ui.theme.PrimaryBlack99
 
 @Composable
 fun TimerDialog(
@@ -20,12 +20,12 @@ fun TimerDialog(
 ) {
     Box(
         modifier = modifier
-            .background(color = PrimaryBlack95)
+            .background(color = PrimaryBlack99)
             .fillMaxSize()
     ) {
         Card(
             modifier = modifier
-                .padding(15.dp)
+                .padding(35.dp)
                 .fillMaxSize(),
             colors = CardDefaults.cardColors(
                 containerColor = PrimaryBlack25

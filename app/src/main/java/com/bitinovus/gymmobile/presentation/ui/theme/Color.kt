@@ -13,4 +13,7 @@ val Pink40 = Color(0xFF7D5260)
 // gym mobile colors
 val PrimaryBlack25 =Color(0xFF202020)
 val PrimaryBlack80 = Color(0xFF323232)
-val PrimaryBlack95 = Color(0x61000000)
+// val PrimaryBlack95 = Color(0x61000000)
+val PrimaryBlack99 = Color(0x99000000)
+
+// val PrimaryWhite95 = Color(0x99FFFFFF)
